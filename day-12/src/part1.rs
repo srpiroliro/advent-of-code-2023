@@ -7,13 +7,14 @@ const UNKNOWN:char = '?';
 
 // neccessary?
 fn validate(row:&str, groups:&Vec<usize>) -> bool {
-    let mut rex_str = r"^\.*".to_string();
-    rex_str.push_str(&groups.iter().map(|n| format!("{}{}", r"#{", n)).collect::<Vec<String>>().join(&r"}\.+"));
-    rex_str.push_str(&r"}\.*$");
+    let damaged_groups:Vec<&str> = row.split(OPERATIONAL).filter(|s| !s.is_empty()).collect();
 
-    let rex = regex::Regex::new(rex_str.as_str()).unwrap();
+    if damaged_groups.len() != groups.len() {
+        return false;
+    }
 
-    rex.is_match(row)
+
+    damaged_groups.iter().zip(groups.iter()).all(|(damaged, group)| damaged.len() == *group)
 }
 
 fn arrengements(row:&str, groups:&Vec<usize>) -> usize {
@@ -74,8 +75,8 @@ pub fn execute() {
                             ?###???????? 3,2,1";
 
     let (result, duration) = crate::aoc::timeit(solution, test_input);
-    println!("Test result: {:?} ({:?})", result, duration);
+    println!("Test result: {:?} ( {:?} )", result, duration);
 
     let (result, duration) = crate::aoc::timeit(solution, input.as_str());
-    println!("Result: {:?} ({:?})", result, duration);
+    println!("Result: {:?} ( {:?} )", result, duration);
 }
