@@ -95,4 +95,6 @@ pub fn execute() {
 
     let (result, duration) = crate::aoc::timeit(solution, input.as_str());
     println!("Result: {:?} ( {:?} )", result, duration);
+
+    println!();
 }
